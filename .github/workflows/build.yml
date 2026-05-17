@@ -18,10 +18,10 @@ jobs:
       run: pip install pygame pyinstaller
 
     - name: Build EXE
-      run: pyinstaller --onefile --windowed --add-data="default.png;." pong.py
+      run: pyinstaller --onefile --windowed --add-data="camil.jpeg;." camil.py
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: pong-exe
-        path: dist/pong.exe
+        name: screensaver-exe
+        path: dist/CustomScreensaver.exe

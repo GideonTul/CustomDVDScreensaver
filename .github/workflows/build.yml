@@ -1,10 +1,12 @@
-name: Build Windows EXE
+name: Build & Release Windows EXE
 
 on:
-  release:
-    types: [created]
+  push:
+    tags:
+      - "v*.*.*"
+
 permissions:
-  write-all
+  contents: write
 
 jobs:
   build:
@@ -17,7 +19,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
@@ -25,11 +27,20 @@ jobs:
 
       - name: Build EXE
         run: |
-          pyinstaller --onefile --windowed --add-data "camil.jpeg;." camil.py
+          pyinstaller --onefile --windowed --name camil --add-data "camil.jpeg;." camil.py
 
-      - name: Upload Release Asset
+      - name: Debug output (verify EXE exists)
+        run: dir dist
+
+      - name: Upload artifact (backup download)
+        uses: actions/upload-artifact@v4
+        with:
+          name: camil-exe
+          path: dist/camil.exe
+
+      - name: Create GitHub Release + Upload EXE
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/CustomScreenSaver.exe
+          files: dist/camil.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

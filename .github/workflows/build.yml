@@ -1,4 +1,4 @@
-name: Build & Release EXE
+name: Build EXE + ZIP Release
 
 on:
   release:
@@ -12,7 +12,8 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -23,13 +24,40 @@ jobs:
         run: |
           pip install pygame pyinstaller
 
+      # ----------------------------
+      # BUILD EXE
+      # ----------------------------
       - name: Build EXE
         run: |
           pyinstaller --onefile --windowed --name camil --add-data "camil.jpeg;." camil.py
 
-      - name: Upload EXE to Release
+      # ----------------------------
+      # BUILD PORTABLE FOLDER
+      # ----------------------------
+      - name: Create portable folder
+        run: |
+          mkdir release
+          copy dist\camil.exe release\
+          copy camil.jpeg release\
+
+      - name: Create ZIP
+        run: |
+          powershell Compress-Archive -Path release\* -DestinationPath camil.zip
+
+      # ----------------------------
+      # DEBUG (optional but useful)
+      # ----------------------------
+      - name: Show files
+        run: dir
+
+      # ----------------------------
+      # UPLOAD TO GITHUB RELEASE
+      # ----------------------------
+      - name: Upload EXE + ZIP
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/camil.exe
+          files: |
+            dist/camil.exe
+            camil.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

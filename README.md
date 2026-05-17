@@ -1,5 +1,7 @@
+DOWNLOAD:
 Go to Releases and download camil.exe
 
+RUN:
 You can double click camil.exe and it will run with a default image.
 
 Command to run with custom image: 

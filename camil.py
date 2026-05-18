@@ -80,7 +80,7 @@ class GameObject:
         self.bounces = 0
 
 
-obj = GameObject(WIDTH // 2, HEIGHT // 2, 5)
+obj = GameObject(WIDTH // 2, HEIGHT // 2, 10)
 
 corner_counter = 0
 pulse = 0
@@ -132,26 +132,22 @@ def handle_bounce(obj):
 
     if obj.x >= WIDTH - IMG_W:
         obj.xtog = True
-        obj.speed *= random.uniform(0.6, 2)
+
         obj.bounces += 1
     elif obj.x <= 0:
         obj.xtog = False
-        obj.speed *= random.uniform(0.6, 2)
+ 
         obj.bounces += 1
 
     if obj.y >= HEIGHT - IMG_H:
         obj.ytog = True
-        obj.speed *= random.uniform(0.6, 2)
+
         obj.bounces += 1
     elif obj.y <= 0:
         obj.ytog = False
-        obj.speed *= random.uniform(0.6, 2)
+
         obj.bounces += 1
 
-    if obj.speed >= 10:
-        obj.speed = obj.speed // random.randint(2, 3)
-    elif obj.speed <= 1:
-        obj.speed *= 2
 
 
 # --------------------
